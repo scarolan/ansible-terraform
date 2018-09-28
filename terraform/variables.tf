@@ -9,6 +9,10 @@ variable "ssh_key" {
   description = "SSH key for connecting to our Red Hat instance"
 }
 
+variable "ssh_pubkey" {
+  description = "Public half of SSH key for connecting to our Red Hat instance."
+}
+
 variable "resource_group" {
   description = "The name of your Azure Resource Group."
   default     = "Terraform-Azure-Beginners"
@@ -61,17 +65,17 @@ variable "vm_size" {
 
 variable "image_publisher" {
   description = "Name of the publisher of the image (az vm image list)"
-  default     = "Canonical"
+  default     = "RedHat"
 }
 
 variable "image_offer" {
   description = "Name of the offer (az vm image list)"
-  default     = "UbuntuServer"
+  default     = "RHEL"
 }
 
 variable "image_sku" {
   description = "Image SKU to apply (az vm image list)"
-  default     = "16.04-LTS"
+  default     = "7.3"
 }
 
 variable "image_version" {

@@ -102,9 +102,14 @@ resource "azurerm_virtual_machine" "site" {
   }
 
   os_profile_linux_config {
-    disable_password_authentication = false
+      disable_password_authentication = true
+      ssh_keys {
+          path     = "/home/${var.admin_username}/.ssh/authorized_keys"
+          key_data = "${var.ssh_pubkey}"
+      }
   }
 
+# TODO: have Dylan help with apache.yml playbook
   provisioner "local-exec" {
     command = "ansible-playbook -i '${self.public_ip},' --private-key ${var.ssh_key} apache.yml"
   }
