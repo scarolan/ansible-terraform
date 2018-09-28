@@ -109,6 +109,11 @@ resource "azurerm_virtual_machine" "site" {
       }
   }
 
+  # This is to ensure SSH comes up before we run the local exec.
+  provisioner "remote-exec" {
+    inline = ["echo 'Hello World'"]
+  }
+
 # TODO: have Dylan help with apache.yml playbook
   provisioner "local-exec" {
     command = "ansible-playbook -i '${self.public_ip},' --private-key ${var.ssh_key} apache.yml"
