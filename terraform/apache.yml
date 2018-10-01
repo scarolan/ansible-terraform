@@ -1,4 +1,0 @@
----
-- hosts: apache
-  tasks:
-    - name: run 

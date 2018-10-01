@@ -15,7 +15,7 @@ variable "ssh_pubkey" {
 
 variable "resource_group" {
   description = "The name of your Azure Resource Group."
-  default     = "Terraform-Azure-Beginners"
+  default     = "Terraform-Ansible"
 }
 
 variable "prefix" {

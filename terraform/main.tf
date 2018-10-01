@@ -20,7 +20,7 @@ resource "azurerm_subnet" "subnet" {
   address_prefix       = "${var.subnet_prefix}"
 }
 
-resource "azurerm_network_security_group" "tf-guide-sg" {
+resource "azurerm_network_security_group" "tf-ansible-sg" {
   name                = "${var.prefix}-sg"
   location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.terraform_ansible.name}"
@@ -50,21 +50,21 @@ resource "azurerm_network_security_group" "tf-guide-sg" {
   }
 }
 
-resource "azurerm_network_interface" "tf-guide-nic" {
-  name                      = "${var.prefix}tf-guide-nic"
+resource "azurerm_network_interface" "tf-ansible-nic" {
+  name                      = "${var.prefix}tf-ansible-nic"
   location                  = "${var.location}"
   resource_group_name       = "${azurerm_resource_group.terraform_ansible.name}"
-  network_security_group_id = "${azurerm_network_security_group.tf-guide-sg.id}"
+  network_security_group_id = "${azurerm_network_security_group.tf-ansible-sg.id}"
 
   ip_configuration {
     name                          = "${var.prefix}ipconfig"
     subnet_id                     = "${azurerm_subnet.subnet.id}"
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = "${azurerm_public_ip.tf-guide-pip.id}"
+    public_ip_address_id          = "${azurerm_public_ip.tf-ansible-pip.id}"
   }
 }
 
-resource "azurerm_public_ip" "tf-guide-pip" {
+resource "azurerm_public_ip" "tf-ansible-pip" {
   name                         = "${var.prefix}-ip"
   location                     = "${var.location}"
   resource_group_name          = "${azurerm_resource_group.terraform_ansible.name}"
@@ -78,7 +78,7 @@ resource "azurerm_virtual_machine" "site" {
   resource_group_name = "${azurerm_resource_group.terraform_ansible.name}"
   vm_size             = "${var.vm_size}"
 
-  network_interface_ids         = ["${azurerm_network_interface.tf-guide-nic.id}"]
+  network_interface_ids         = ["${azurerm_network_interface.tf-ansible-nic.id}"]
   delete_os_disk_on_termination = "true"
 
   storage_image_reference {
@@ -109,14 +109,23 @@ resource "azurerm_virtual_machine" "site" {
       }
   }
 
+
+
   # This is to ensure SSH comes up before we run the local exec.
   provisioner "remote-exec" {
     inline = ["echo 'Hello World'"]
+
+    connection {
+      type = "ssh"
+      host = "${azurerm_public_ip.tf-ansible-pip.ip_address}"
+      user = "${var.admin_username}"
+      private_key = "${var.ssh_key}"
+    }
   }
 
 # TODO: have Dylan help with apache.yml playbook
   provisioner "local-exec" {
-    command = "ansible-playbook -i '${self.public_ip},' --private-key ${var.ssh_key} apache.yml"
+    command = "ansible-playbook -i '${azurerm_public_ip.tf-ansible-pip.ip_address},' --private-key ${var.ssh_key} httpd.yml"
   }
 
 }
