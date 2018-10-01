@@ -109,23 +109,20 @@ resource "azurerm_virtual_machine" "site" {
       }
   }
 
-
-
   # This is to ensure SSH comes up before we run the local exec.
-  provisioner "remote-exec" {
+  provisioner "remote-exec" { 
     inline = ["echo 'Hello World'"]
 
     connection {
       type = "ssh"
-      host = "${azurerm_public_ip.tf-ansible-pip.ip_address}"
+      host = "${azurerm_public_ip.tf-ansible-pip.fqdn}"
       user = "${var.admin_username}"
       private_key = "${var.ssh_key}"
     }
   }
 
-# TODO: have Dylan help with apache.yml playbook
   provisioner "local-exec" {
-    command = "ansible-playbook -i '${azurerm_public_ip.tf-ansible-pip.ip_address},' --private-key ${var.ssh_key} httpd.yml"
+    command = "ansible-playbook -i '${azurerm_public_ip.tf-ansible-pip.fqdn},' --private-key ${var.ssh_key_path} ../ansible/httpd.yml"
   }
 
 }

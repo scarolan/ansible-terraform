@@ -9,6 +9,10 @@ variable "ssh_key" {
   description = "SSH key for connecting to our Red Hat instance"
 }
 
+variable "ssh_key_path" {
+  description = "Path to your ssh key on the local system."
+}
+
 variable "ssh_pubkey" {
   description = "Public half of SSH key for connecting to our Red Hat instance."
 }
