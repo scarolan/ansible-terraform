@@ -5,4 +5,6 @@ This repository contains code examples for running Terraform and Ansible togethe
 
 ## Run Terraform from Ansible
 
+## Build System Images with Packer and Ansible
+
 ## Integrate HashiCorp Vault with Ansible
