@@ -122,7 +122,7 @@ resource "azurerm_virtual_machine" "site" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i '${azurerm_public_ip.tf-ansible-pip.fqdn},' --private-key ${var.ssh_key_path} ../ansible/httpd.yml"
+    command = "ansible-playbook -i ../ansible/inventory.yaml --private-key ${var.ssh_key_path} ../ansible/httpd.yml"
   }
 
 }

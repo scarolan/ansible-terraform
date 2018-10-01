@@ -1,13 +1,27 @@
 ---
-- hosts: all
+- hosts: http
   become: yes
   become_user: root
+
+  vars:
+    helloworld: Meow!
+
   tasks:
     - name: Stop firewalld
-      service: name=firewalld state=stopped
+      service: 
+        name: firewalld 
+        state: stopped
+
     - name: Install the httpd package
-      yum: name=httpd
+      yum: 
+        name: httpd
+
     - name: Start the httpd service
-      service: name=httpd state=started
+      service: 
+        name: httpd 
+        state: started
+        
     - name: Configure Cat App
-      script: ../files/webapp.sh
+      template:
+        src: ../files/index.j2
+        dest: /var/www/html/index.html
