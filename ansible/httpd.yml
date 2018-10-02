@@ -3,6 +3,8 @@
   become: yes
   become_user: root
   tasks:
+    - name: Install firewalld
+      yum: name=firewalld
     - name: Stop firewalld
       service: name=firewalld state=stopped
     - name: Install the httpd package

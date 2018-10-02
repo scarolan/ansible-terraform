@@ -39,20 +39,73 @@ resource "google_compute_instance" "tfansible" {
     scopes = ["userinfo-email", "compute-ro", "storage-ro"]
   }
 
-  provisioner "remote-exec" {
-    inline = ["echo 'Hello World'"]
+  ##############################################################################
+  # This is the 'local exec' method.  
+  # Ansible runs from the same host you run Terraform from
+  ##############################################################################
+  #   provisioner "remote-exec" {
+  #     inline = ["echo 'Hello World'"]
 
-    connection {
-      type        = "ssh"
-      host        = "${google_compute_instance.tfansible.network_interface.0.access_config.0.assigned_nat_ip}"
-      user        = "${var.ssh_user}"
-      private_key = "${file("${var.private_key_path}")}"
-    }
-  }
+  #     connection {
+  #       type        = "ssh"
+  #       user        = "${var.ssh_user}"
+  #       private_key = "${file("${var.private_key_path}")}"
+  #     }
+  #   }
 
-  provisioner "local-exec" {
-    command = "ansible-playbook -i '${google_compute_instance.tfansible.network_interface.0.access_config.0.assigned_nat_ip},' --private-key ${var.private_key_path} ../ansible/httpd.yml"
-  }
+  #   provisioner "local-exec" {
+  #     command = "ansible-playbook -i '${google_compute_instance.tfansible.network_interface.0.access_config.0.assigned_nat_ip},' --private-key ${var.private_key_path} ../ansible/httpd.yml"
+  #   }
+
+  ##############################################################################
+  # This is the 'remote exec' method.  
+  # Ansible runs on the target host.
+  ##############################################################################
+  #   provisioner "remote-exec" {
+  #     inline = [
+  #       "mkdir /home/${var.ssh_user}/files",
+  #       "mkdir /home/${var.ssh_user}/ansible",
+  #     ]
+
+  #     connection {
+  #       type        = "ssh"
+  #       user        = "${var.ssh_user}"
+  #       private_key = "${file("${var.private_key_path}")}"
+  #     }
+  #   }
+  #   provisioner "file" {
+  #     source      = "../ansible/httpd.yml"
+  #     destination = "/home/${var.ssh_user}/ansible/httpd.yml"
+
+  #     connection {
+  #       type        = "ssh"
+  #       user        = "${var.ssh_user}"
+  #       private_key = "${file("${var.private_key_path}")}"
+  #     }
+  #   }
+  #   provisioner "file" {
+  #     source      = "../files/webapp.sh"
+  #     destination = "/home/${var.ssh_user}/files/webapp.sh"
+
+  #     connection {
+  #       type        = "ssh"
+  #       user        = "${var.ssh_user}"
+  #       private_key = "${file("${var.private_key_path}")}"
+  #     }
+  #   }
+  #   provisioner "remote-exec" {
+  #     inline = [
+  #       "sudo yum -y install ansible",
+  #       "cd ansible; ansible-playbook -c local -i \"localhost,\" httpd.yml",
+  #     ]
+
+  #     connection {
+  #       type        = "ssh"
+  #       user        = "${var.ssh_user}"
+  #       private_key = "${file("${var.private_key_path}")}"
+  #     }
+  #   }
+  # Don't comment out this next line.
 }
 
 resource "google_compute_firewall" "default" {
