@@ -3,7 +3,7 @@ This repository contains code examples for running Terraform and Ansible togethe
 
 ## Run Ansible from Terraform
 ### With `local_exec`
-Use the code examples in the `terraform_gcp` or `terraform_azure` folders to see how this is done. Basically there are two steps. First is a remote exec which forces Terraform to wait until SSH is running to run Ansible. This can be anything, even an `echo "Hello World"` command.
+Use the code examples in the `terraform_gcp` or `terraform_azure` folders to see how this is done. Basically there are two steps. First is a remote exec which forces Terraform to wait until SSH is running to run Ansible. This can be anything, even an `echo "Hello World"` command. Then we execute an `ansible-playbook` command from the same machine where we ran `terraform apply`.
 
 ### With `remote_exec`
 The code example in the `terraform_gcp` directory has code for remote exec commented out. You can comment out the local_exec code and run this to have Ansible run on the remote host. With this method we first copy our playbook to the remote host, then we install and run Ansible locally there.
