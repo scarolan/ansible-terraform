@@ -1,0 +1,5 @@
+http:
+  hosts:
+    ec2-13-57-34-111.us-west-1.compute.amazonaws.com:
+  vars:
+    ansible_ssh_user: centos
