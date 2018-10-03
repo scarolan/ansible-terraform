@@ -9,7 +9,8 @@ Use the code examples in the `terraform_gcp` or `terraform_azure` folders to see
 The code example in the `terraform_gcp` directory has code for remote exec commented out. You can comment out the local_exec code and run this to have Ansible run on the remote host. With this method we first copy our playbook to the remote host, then we install and run Ansible locally there.
 
 ## Run Terraform from Ansible
-
+Ansible has a Terraform module that can trigger Terraform deployments and plans. You can also pull resource information back into Ansible:
+https://docs.ansible.com/ansible/devel/modules/terraform_module.html
 
 ## Build System Images with Packer and Ansible
 HashiCorp's Packer tool allows you to use your existing Ansible playbooks to easily build machine images on the cloud or virtualization platform of your choice. Packer uses a JSON file for configuration, and is run from the command line. 
