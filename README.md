@@ -15,3 +15,8 @@ The code example in the `terraform_gcp` directory has code for remote exec comme
 HashiCorp's Packer tool allows you to use your existing Ansible playbooks to easily build machine images on the cloud or virtualization platform of your choice. Packer uses a JSON file for configuration, and is run from the command line. 
 
 ## Integrate HashiCorp Vault with Ansible
+You can easily fetch secrets from Vault using the Hashi Vault Ansible plugin:
+https://docs.ansible.com/ansible/devel/plugins/lookup/hashi_vault.html
+
+This plugin is based on the excellent Python HVAC library:
+https://github.com/hvac/hvac
