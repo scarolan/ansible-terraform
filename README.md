@@ -1,3 +1,6 @@
+# DEPRECATED
+This repository was current back in 2018 and likely contains out of date info.  You have been warned.
+
 # Ansible and Terraform - Better Together
 This repository contains code examples for running Terraform and Ansible together in different configurations.
 
